@@ -1,16 +1,24 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 interface NoteProps {
     audioFile: string,
-    text?: string
+    text?: string,
+    ac: AudioContext,
+    pitch?: number,
 }
 
 const Note: React.FC<NoteProps> = (props) => {
-    const playAudio = () => {
-        const audio = new Audio(props.audioFile);       
-        audio.play();
+    const playAudio = async () => {
+        if (props.ac.state === 'suspended') await props.ac.resume();
+        
+        const response = await fetch(props.audioFile);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await props.ac.decodeAudioData(arrayBuffer);
+        const source = props.ac.createBufferSource();
+        source.buffer = audioBuffer;
+        source.playbackRate.value = props.pitch || 1;
+        source.connect(props.ac.destination);
+        source.start(0);
     };
 
     return (
@@ -25,6 +33,7 @@ const Note: React.FC<NoteProps> = (props) => {
 Note.defaultProps = {
     audioFile: '',
     text: 'Note',
+    pitch: 1,
 };
 
 export default Note;

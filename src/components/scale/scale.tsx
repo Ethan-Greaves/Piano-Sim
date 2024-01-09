@@ -2,16 +2,16 @@ import React from 'react';
 import Note from '@/components/note/note';
 
 interface ScaleProps {
-
+    ac: AudioContext
 }
 
-const Scale: React.FC<ScaleProps> = () => {
+const Scale: React.FC<ScaleProps> = (props) => {
     const cMajorKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 
     return (
         <div className='flex'>
             {cMajorKeys.map((key) => (
-                <Note key={key} text={key} audioFile='/audio/samplePiano.wav' />
+                <Note ac={props.ac} key={key} text={key} pitch={Math.random()} audioFile='/audio/samplePiano.wav' />
             )
             )}
       </div>
