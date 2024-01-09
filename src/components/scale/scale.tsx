@@ -10,11 +10,13 @@ const Scale: React.FC<ScaleProps> = (props) => {
 
     return (
         <div className='flex'>
-            {cMajorKeys.map((key) => (
-                <Note ac={props.ac} key={key} text={key} pitch={Math.random()} audioFile='/audio/samplePiano.wav' />
-            )
-            )}
-      </div>
+            {cMajorKeys.map((key, i) => {
+                console.log(i * 2);
+                return (
+                    <Note ac={props.ac} key={key} text={key} semitonesToShift={i * 2} audioFile='/audio/samplePiano.wav' />
+                );
+            })}
+        </div>
     );
 };
 

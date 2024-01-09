@@ -1,10 +1,11 @@
+import { usePlaybackRateSemitones } from '@/hooks/usePlaybackRateSemitones';
 import React from 'react';
 
 interface NoteProps {
     audioFile: string,
     text?: string,
     ac: AudioContext,
-    pitch?: number,
+    semitonesToShift: number,
 }
 
 const Note: React.FC<NoteProps> = (props) => {
@@ -16,7 +17,7 @@ const Note: React.FC<NoteProps> = (props) => {
         const audioBuffer = await props.ac.decodeAudioData(arrayBuffer);
         const source = props.ac.createBufferSource();
         source.buffer = audioBuffer;
-        source.playbackRate.value = props.pitch || 1;
+        source.playbackRate.value = usePlaybackRateSemitones(props.semitonesToShift) || 1;
         source.connect(props.ac.destination);
         source.start(0);
     };
@@ -33,7 +34,7 @@ const Note: React.FC<NoteProps> = (props) => {
 Note.defaultProps = {
     audioFile: '',
     text: 'Note',
-    pitch: 1,
+    semitonesToShift: 0,
 };
 
 export default Note;
