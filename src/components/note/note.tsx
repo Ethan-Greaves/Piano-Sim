@@ -6,35 +6,36 @@ interface NoteProps {
     text?: string,
     ac: AudioContext,
     semitonesToShift: number,
+    white: boolean
 }
 
-const Note: React.FC<NoteProps> = (props) => {
+const Note: React.FC<NoteProps> = ({
+    audioFile = '',
+    text = 'Note',
+    ac,
+    semitonesToShift = 0,
+    white = true,
+}) => {
     const playAudio = async () => {
-        if (props.ac.state === 'suspended') await props.ac.resume();
+        if (ac.state === 'suspended') await ac.resume();
         
-        const response = await fetch(props.audioFile);
+        const response = await fetch(audioFile);
         const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await props.ac.decodeAudioData(arrayBuffer);
-        const source = props.ac.createBufferSource();
+        const audioBuffer = await ac.decodeAudioData(arrayBuffer);
+        const source = ac.createBufferSource();
         source.buffer = audioBuffer;
-        source.playbackRate.value = usePlaybackRateSemitones(props.semitonesToShift) || 1;
-        source.connect(props.ac.destination);
+        source.playbackRate.value = usePlaybackRateSemitones(semitonesToShift) || 1;
+        source.connect(ac.destination);
         source.start(0);
     };
 
     return (
         <div>
-            <button onClick={playAudio} className='w-16 h-48 mx-2 bg-gray-200 text-white text-sm'>
-                {props.text}
+            <button onClick={playAudio} className={`box-border inline-block ${white ? 'w-6 h-32 bg-white border-8 border-black mr-1' : 'black'}`}>
+                <span className='text-black select-none'>{text}</span>
             </button>
         </div>
     );
-};
-
-Note.defaultProps = {
-    audioFile: '',
-    text: 'Note',
-    semitonesToShift: 0,
 };
 
 export default Note;

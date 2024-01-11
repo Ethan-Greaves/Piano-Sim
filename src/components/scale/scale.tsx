@@ -1,19 +1,17 @@
 import React from 'react';
 import Note from '@/components/note/note';
+import notes from '@/data/notes';
 
 interface ScaleProps {
     ac: AudioContext
 }
 
 const Scale: React.FC<ScaleProps> = (props) => {
-    const cMajorKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-
     return (
         <div className='flex'>
-            {cMajorKeys.map((key, i) => {
-                console.log(i * 2);
+            {notes.map((note, i) => {
                 return (
-                    <Note ac={props.ac} key={key} text={key} semitonesToShift={i * 2} audioFile='/audio/samplePiano.wav' />
+                    <Note ac={props.ac} text={note.name} semitonesToShift={note.semitones} audioFile='/audio/samplePiano.wav' />
                 );
             })}
         </div>
