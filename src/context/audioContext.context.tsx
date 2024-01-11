@@ -1,16 +1,17 @@
-import React, { createContext, useContext } from 'react';
+import React, {createContext} from 'react';
 
-// Create a context for the audio context
-const AudioContextContext = createContext<AudioContext>(new AudioContext());
-
-const AudioContextProvider = ({ children }: any) => {
-    const audioContext = new AudioContext();
-
-    return (
-        <AudioContextContext.Provider value={audioContext}>
-            {children}
-        </AudioContextContext.Provider>
-    );
+interface AudioProviderProps { 
+    children: React.ReactNode;
 }
 
-export { AudioContextProvider, AudioContextContext };
+const NewAudioContext = createContext<AudioContext>(new AudioContext());
+
+
+
+export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
+    const ac = new AudioContext();
+
+    return <NewAudioContext.Provider value={ac}>{children}</NewAudioContext.Provider>;
+};
+
+export default NewAudioContext;

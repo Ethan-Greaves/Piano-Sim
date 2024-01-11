@@ -1,10 +1,10 @@
 import { usePlaybackRateSemitones } from '@/hooks/usePlaybackRateSemitones';
-import React from 'react';
+import React, { useContext } from 'react';
+import AudioContext from '@/context/audioContext.context';
 
 interface NoteProps {
     audioFile: string,
     text?: string,
-    ac: AudioContext,
     semitonesToShift: number,
     white: boolean
 }
@@ -12,10 +12,11 @@ interface NoteProps {
 const Note: React.FC<NoteProps> = ({
     audioFile = '',
     text = 'Note',
-    ac,
     semitonesToShift = 0,
     white = true,
 }) => {
+    const ac = useContext(AudioContext);
+    
     const playAudio = async () => {
         if (ac.state === 'suspended') await ac.resume();
         
